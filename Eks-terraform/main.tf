@@ -1,3 +1,8 @@
+variable "env" {
+  default = "jenkins"
+}
+
+
 data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"
@@ -12,7 +17,7 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "example" {
-  name               = "eks-cluster-cloud"
+  name               = "eks-cluster-cloud-${var.env}"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -49,7 +54,7 @@ resource "aws_eks_cluster" "example" {
 }
 
 resource "aws_iam_role" "example1" {
-  name = "eks-node-group-cloud"
+  name = "eks-node-group-cloud-${var.env}"
 
   assume_role_policy = jsonencode({
     Statement = [{
